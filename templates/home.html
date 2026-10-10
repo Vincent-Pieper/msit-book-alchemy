@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Library</title>
+  </head>
+
+  <body>
+    <h1>My Library</h1>
+
+    {% if message %}
+      <p>{{ message }}</p>
+    {% endif %}
+
+    <nav>
+      <a href="/add_author">Add Author</a>
+      |
+      <a href="/add_book">Add Book</a>
+    </nav>
+
+    <hr>
+
+    <form action="/" method="GET">
+      <label for="search">Search books:</label>
+      <input
+        type="text"
+        id="search"
+        name="search"
+        value="{{ search_query or '' }}"
+        placeholder="Search by title"
+      >
+
+      <label for="sort_by">Sort by:</label>
+      <select id="sort_by" name="sort_by">
+        <option value="title" {% if sort_by == "title" %}selected{% endif %}>
+          Title
+        </option>
+        <option value="author" {% if sort_by == "author" %}selected{% endif %}>
+          Author
+        </option>
+        <option value="published" {% if sort_by == "published" %}selected{% endif %}>
+          published
+        </option>
+      </select>
+
+      <input type="submit" value="Apply">
+    </form>
+
+    <hr>
+
+    {% if books %}
+      {% for book in books %}
+        <div>
+
+          <img
+            src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+            alt="Cover for {{ book.title }}"
+          >
+
+          <h3>{{ book.title }}</h3>
+
+          <p>
+            <strong>Author:</strong>
+            {{ book.author.name }}
+          </p>
+
+          <p>
+            <strong>Publication Year:</strong>
+            {{ book.publication_year }}
+          </p>
+
+          <p>
+          <p>
+            <strong>ISBN:</strong>
+            {{ book.isbn }}
+          </p>
+
+          <form action="/book/{{ book.id }}/delete" method="POST">
+            <input type="submit" value="Delete Book">
+          </form>
+        </div>
+
+        <hr>
+      {% endfor %}
+    {% else %}
+      <p>No books found.</p>
+    {% endif %}
+
+  </body>
+</html>
